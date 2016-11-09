@@ -27,6 +27,15 @@
 (define (helper g x)
   (abs (/ (- (square g) x) x)))
 
+(define (another-sqrt x)
+  (define (good? g x)
+    (< (abs (- (square g) x)) 0.001))
+  (define (improve g x) (average g (/ x g)))
+  (define (another-sqrt-iter g x)
+    (if (good? g x)
+        g
+        (another-sqrt-iter (improve g x) x)))
+  (another-sqrt-iter 1.0 x))
   
 
 
