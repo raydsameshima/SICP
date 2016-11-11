@@ -50,6 +50,15 @@
         (iter (* counter product)
               (+ counter 1))))
   (iter 1 1))
+; exercise 1.9
+(define (r-plus a b)
+  (if (= a 0) b
+              (inc (r-plus (dec a) b))))
+(define (plus a b)
+  (if (= a 0) b
+              (plus (dec a) (inc b))))
+(define (inc a) (+ a 1))
+(define (dec a) (- a 1))
 
 ; excercise 1.10
 (define (accurman x y)
@@ -58,9 +67,19 @@
         ((= y 1) 2)
         (else (accurman (- x 1) (accurman x (- y 1))))))
 
+; 1.2.2
+(define (t_fib n)
+  (cond ((= n 0) 0)
+        ((= n 1) 1)
+        (else (+ (t_fib (- n 1))
+                 (t_fib (- n 2))))))
 
+(define (fib n)
+  (define (iter a b count)
+    (if (= count 0)
+        b
+        (iter (+ a b) a (- count 1))))
+  (iter 1 0 n))
 
-
-
-
+; example, 100cent
 
