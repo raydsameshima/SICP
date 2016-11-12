@@ -106,5 +106,57 @@
         (iter (+ a b) a (- count 1))))
   (iter 1 0 n))
 
-; example, 100cent
+; Example: Counting charge
+(define (count-change amount) (cc amount 5))
+(define (cc amount kinds-of-coins)
+  (cond ((= amount 0) 1)
+        ((or (< amount 0) (= kinds-of-coins 0)) 0)
+        (else (+ (cc amount
+                     (- kinds-of-coins 1))
+                 (cc (- amount
+                        (first-denomination kinds-of-coins))
+                     kinds-of-coins)))))
+(define (first-denomination kinds-of-coins)
+  (cond ((= kinds-of-coins 1) 1)
+        ((= kinds-of-coins 2) 5)
+        ((= kinds-of-coins 3) 10)
+        ((= kinds-of-coins 4) 25)
+        ((= kinds-of-coins 5) 50)))
+
+; Exercise 1.11
+(define (f11 n)
+  (cond ((< n 3) n)
+        (else (+ (f11 (- n 1))
+                 (* 2 (f11 (- n 2)))
+                 (* 3 (f11 (- n 3)))))))
+
+; 1.2.3 Orders of Growth                 
+
+; Exercise 1.15
+(define (cube x) (* x x x))
+(define (p x) (- (* 3 x) (* 4 (cube x))))
+(define (sine angle)
+  (if (< (abs angle) 0.01)
+      angle
+      (p (sine (/ angle 3.0)))))
+
+; 1.2.4 Exponentiation
+; Linear recursive exp, O(n)-steps and O(n)-space.
+(define (rexp b n)
+  (if (= n 0)
+      1
+      (* b (rexp b (- n 1)))))
+; Tail recursive version, O(n)-steps and O(1)-space.
+(define (texp b n) (texp-iter b n 1))
+(define (texp-iter b counter product)
+  (if (= counter 0)
+      product
+      (texp-iter b (- counter 1) (* b product))))
+; A fast version, O(log n)-steps
+(define (fast-expt b n)
+  (define (square x) (* x x))
+  (cond ((= n 0) 1)
+        ((even? n) (square (fast-expt b (/ n 2))))
+        (else (* b (fast-expt b (- n 1))))))
+(define (even? n) (= (remainder n 2) 0))
 
