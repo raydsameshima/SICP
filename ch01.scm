@@ -154,9 +154,52 @@
       (texp-iter b (- counter 1) (* b product))))
 ; A fast version, O(log n)-steps
 (define (fast-expt b n)
-  (define (square x) (* x x))
   (cond ((= n 0) 1)
         ((even? n) (square (fast-expt b (/ n 2))))
         (else (* b (fast-expt b (- n 1))))))
+
+(define (square x) (* x x))
 (define (even? n) (= (remainder n 2) 0))
 
+; Exercise 1.17
+; Linear recursive version.
+(define (lin-mult a b)
+  (if (= b 0)
+      0
+      (+ a (lin-mult a (- b 1)))))
+; Tail-recursive version.
+(define (tail-mult a b) 
+  (define (iter a b p)
+    (if (= b 0) 
+        p
+        (iter a (- b 1) (+ p a))))
+  (iter a b 0))
+; Fast version.
+(define (mult a b)
+  (cond ((= b 0) 0)
+        ((= b 1) a)
+        ((even? b) (double (mult a (/ b 2))))
+        (else (+ a (mult a (- b 1))))))
+(define (double x) (* 2 x))
+
+; Exercise 1.19
+(define (fib n) 
+  (define (fib-iter a b p q count)
+    (cond 
+      ((= count 0) b)
+      ((even? count)
+         (fib-iter 
+           a
+           b
+           (+ (square p) (square q))
+           (+ (* 2 p q) (square q))
+           (/ count 2)))
+      (else (fib-iter 
+              (+ (* b q) (* a q) (* a p))
+              (+ (* b p) (* a q))
+              p
+              q
+              (- count 1)))))
+  (fib-iter 1 0 0 1 n))
+
+; 1.2.5 Greatest Common Divisors
