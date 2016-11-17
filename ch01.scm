@@ -203,3 +203,21 @@
   (fib-iter 1 0 0 1 n))
 
 ; 1.2.5 Greatest Common Divisors
+(define (my-gcd a b)
+  (cond ((= a b) a)
+        ((< a b) (my-gcd b a))
+        (else (my-gcd (- a b) b))))
+(define (my-gcd2 a b)
+  (if (= b 0) 
+      a
+      (my-gcd2 b (remainder a b))))
+
+; 1.2.6 Example: Testing for Primality
+; O(sqrt n) algorithm
+(define (smallest-divisor n) (find-divisor n 2))
+(define (find-divisor n test-divisor)
+  (cond ((> (square test-divisor) n) n)
+        ((divides? test-divisor n) test-divisor)
+        (else (find-divisor n (+ test-divisor 1)))))
+(define (divides? a b) (= (remainder b a) 0))
+(define (prime? n) (= n (smallest-divisor n)))
