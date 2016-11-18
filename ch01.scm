@@ -221,3 +221,25 @@
         (else (find-divisor n (+ test-divisor 1)))))
 (define (divides? a b) (= (remainder b a) 0))
 (define (prime? n) (= n (smallest-divisor n)))
+
+; The Fermat test
+; Fermat's Little Theorem:
+; If n is a prime number and a is any positive integer less than n, then a raised to the n-th power is congruent to a modulo n.
+; Proof by induction
+; Let n be an arbitrary prime.
+; Base case: 0^n - 0 = 0.
+; Induction step: let us assume a >= 0 satisfies
+;   a^p - a = p*N(a),
+; where N(a) is a natural number.
+; Consider (a+1).
+; If (a+1) = p, then it's done since
+;   p^p - p = p*(p^(p-1) -1)
+; If a+1 < p, then
+;   (a+1)^p - (a+1)
+;    = a^p - a + \sum_{k=1}^{p-1} c(n,k)*a^k
+; where
+;   c(n,k) := n!/(k!*(n-k)!)
+; Now since n is a prime, and 1 <= k, n-k < p, this binomial coefficients are multiples of n.
+; Therefore,
+;   (a+1)^p - (a+1) = p*M
+; Q.E.D.
