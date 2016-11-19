@@ -1,6 +1,8 @@
 Ch01.lhs
 
 > module Ch01 where
+> import Data.Numbers.Primes
+> import System.Random
 
 1.2.1 Liner Recursion and Iteration
 Exercise 1.10 Ackermann's function.
@@ -51,3 +53,43 @@ Exercise 1.11
 
 1.2.6 Example: Testing for Primality
 
+> smallestDivisor :: Integral n => n -> n
+> smallestDivisor n = helper n 2
+>   where
+>     helper n t
+>       | t^2 > n        = n 
+>       | n `rem` t == 0 = t
+>       | otherwise      = helper n (next t)
+>     next 2 = 3
+>     next n = n+2
+>
+> isPrime1 :: Integral n => n -> Bool
+> isPrime1 p = p == smallestDivisor p
+
+The Fermat test
+
+> expMod :: (Integral a, Integral b) => a -> b -> a -> a
+> expMod b e m
+>   | e == 0 = 1
+>   | even e = (sq (expMod b (e `div` 2) m)) `rem` m
+>   | otherwise = (b*(expMod b (e-1) m)) `rem` m
+>   where
+>     sq k = k*k
+>
+> fermatTest' :: Integral a => a -> Bool
+> fermatTest' n = and $ map helper $ takeWhile (\a -> a^2 < n) [1,2..]
+>   where
+>     helper a = a == expMod a n n 
+>
+> fermatTest n = do
+>   a <- randomRIO (1,(n-1)) :: IO Int
+>   return $ tryIt a
+>     where
+>       tryIt num = num == expMod num n n
+>
+> {-
+> isPrime2 n t 
+>   | t == 0       = True
+>   | fermatTest n = isPrime2 n (t-1)
+>   | otherwise    = False
+> -}

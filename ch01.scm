@@ -2,6 +2,7 @@
 ; To load this file, type (load "ch01.scm")
 ;
 ; SICP 
+;
 ; chapter 01
 ; Building Abstractions with Procedures
 ; 1.1 The Elements of Programming
@@ -213,21 +214,25 @@
       (my-gcd2 b (remainder a b))))
 
 ; 1.2.6 Example: Testing for Primality
+; From now on, we will use _.
 ; O(sqrt n) algorithm
-(define (smallest-divisor n) (find-divisor n 2))
-(define (find-divisor n test-divisor)
-  (cond ((> (square test-divisor) n) n)
-        ((divides? test-divisor n) test-divisor)
-        (else (find-divisor n (+ test-divisor 1)))))
+(define (smallest_divisor n) (find_divisor n 2))
+(define (find_divisor n test_divisor)
+  (cond ((> (square test_divisor) n) n)
+        ((divides? test_divisor n) test_divisor)
+        (else (find_divisor n (+ test_divisor 1)))))
 (define (divides? a b) (= (remainder b a) 0))
-(define (prime? n) (= n (smallest-divisor n)))
+(define (prime? n) (= n (smallest_divisor n)))
 
 ; The Fermat test
 ; Fermat's Little Theorem:
-; If n is a prime number and a is any positive integer less than n, then a raised to the n-th power is congruent to a modulo n.
-; Proof by induction
+; If n is a prime number and a is any positive integer less than n.
+; Then a raised to the n-th power is congruent to a modulo n.
+;
+; Proof by induction.
 ; Let n be an arbitrary prime.
 ; Base case: 0^n - 0 = 0.
+;
 ; Induction step: let us assume a >= 0 satisfies
 ;   a^p - a = p*N(a),
 ; where N(a) is a natural number.
@@ -243,3 +248,20 @@
 ; Therefore,
 ;   (a+1)^p - (a+1) = p*M
 ; Q.E.D.
+
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+        ((even? exp)
+           (remainder (square (expmod base (/ exp 2) m))
+                      m))
+        (else
+           (remainder (* base (expmod base (- exp 1) m))
+                      m))))
+(define (fermat_test n)
+  (define (try_it a)
+    (= (expmod a n n) a))
+  (try_it (+ 1 (random (- n 1)))))
+(define (fast_prime? n times)
+  (cond ((= times 0) #t)
+        ((fermat-test n) (fast_prime? n (- times 1)))
+        (else #f)))
