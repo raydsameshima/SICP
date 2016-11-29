@@ -94,11 +94,11 @@
         (else (ack (- x 1) (ack x (- y 1))))))
 
 ; 1.2.2
-(define (t_fib n)
+(define (t-fib n)
   (cond ((= n 0) 0)
         ((= n 1) 1)
-        (else (+ (t_fib (- n 1))
-                 (t_fib (- n 2))))))
+        (else (+ (t-fib (- n 1))
+                 (t-fib (- n 2))))))
 
 (define (fib n)
   (define (iter a b count)
@@ -214,15 +214,15 @@
       (my-gcd2 b (remainder a b))))
 
 ; 1.2.6 Example: Testing for Primality
-; From now on, we will use _.
+; From now on, we will use -.
 ; O(sqrt n) algorithm
-(define (smallest_divisor n) (find_divisor n 2))
-(define (find_divisor n test_divisor)
-  (cond ((> (square test_divisor) n) n)
-        ((divides? test_divisor n) test_divisor)
-        (else (find_divisor n (+ test_divisor 1)))))
+(define (smallest-divisor n) (find-divisor n 2))
+(define (find-divisor n test-divisor)
+  (cond ((> (square test-divisor) n) n)
+        ((divides? test-divisor n) test-divisor)
+        (else (find-divisor n (+ test-divisor 1)))))
 (define (divides? a b) (= (remainder b a) 0))
-(define (prime? n) (= n (smallest_divisor n)))
+(define (prime? n) (= n (smallest-divisor n)))
 
 ; The Fermat test
 ; Fermat's Little Theorem:
@@ -241,7 +241,7 @@
 ;   p^p - p = p*(p^(p-1) -1)
 ; If a+1 < p, then
 ;   (a+1)^p - (a+1)
-;    = a^p - a + \sum_{k=1}^{p-1} c(n,k)*a^k
+;    = a^p - a + \sum-{k=1}^{p-1} c(n,k)*a^k
 ; where
 ;   c(n,k) := n!/(k!*(n-k)!)
 ; Now since n is a prime, and 1 <= k, n-k < p, this binomial coefficients are multiples of n.
@@ -257,11 +257,13 @@
         (else
            (remainder (* base (expmod base (- exp 1) m))
                       m))))
-(define (fermat_test n)
-  (define (try_it a)
+(define (fermat-test n)
+  (define (try-it a)
     (= (expmod a n n) a))
-  (try_it (+ 1 (random (- n 1)))))
-(define (fast_prime? n times)
+  (try-it (+ 1 (random (- n 1)))))
+(define (fast-prime? n times)
   (cond ((= times 0) #t)
-        ((fermat-test n) (fast_prime? n (- times 1)))
+        ((fermat-test n) (fast-prime? n (- times 1)))
         (else #f)))
+; Probabilistic methods
+
