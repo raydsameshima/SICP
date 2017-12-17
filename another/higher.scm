@@ -85,3 +85,23 @@
     ((proc obj (car ls)) ls)
     (else (my-member proc obj (cdr ls)))))
 
+;
+(define (my-filter f ls)
+  (cond
+    ((null? ls) '())
+    ((f (car ls)) (cons (car ls) (my-filter f (cdr ls))))
+    (else (my-filter f (cdr ls)))))
+
+;
+(define (my-map fun . lss)
+  (letrec ((iter (lambda (fun lss)
+                         (if (null? lss)
+                             '()
+                             (cons (fun (car lss))
+                                   (iter fun (cdr lss))))))
+           (map-rec (lambda (fun lss)
+                            (if (memq '() lss)
+                                '()
+                                (cons (apply fun (iter car lss))
+                                      (map-rec fun (iter cdr lss)))))))
+  (map-rec fun lss)))
