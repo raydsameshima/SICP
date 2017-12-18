@@ -1,4 +1,4 @@
-; higher order functions
+; 08 higher order functions
 ; 
 ; 1 ]=> (sort '(7883 9099 6729 2828 7754 4179 5340 2644 2958 2239) <)
 ; 
@@ -94,14 +94,18 @@
 
 ;
 (define (my-map fun . lss)
-  (letrec ((iter (lambda (fun lss)
+  (letrec ((iter (lambda (fun lss) ; this iteration is the map for one list
                          (if (null? lss)
                              '()
                              (cons (fun (car lss))
                                    (iter fun (cdr lss))))))
            (map-rec (lambda (fun lss)
-                            (if (memq '() lss)
+                            (if (memq '() lss) ; membership with eq?
                                 '()
                                 (cons (apply fun (iter car lss))
                                       (map-rec fun (iter cdr lss)))))))
   (map-rec fun lss)))
+; 
+; 1 ]=> (my-map + '(1 2 3) '(10 20 30) '(100 200 300))
+; 
+; ;Value 21: (111 222 333)
