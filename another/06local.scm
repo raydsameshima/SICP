@@ -1,4 +1,4 @@
-; local variable
+; 06 local variable
 ; let
 
 ; 
