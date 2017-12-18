@@ -1,3 +1,4 @@
+; 05 cases
 ; if
 (define (sum-gp a0 r n)
   (* a0
