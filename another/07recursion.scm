@@ -55,7 +55,7 @@
   (cond
     ((null? ls) #f)
     ((eqv? x (car ls)) i)
-    (else (position-aux x (cdr ls) (inc i)))))
+    (else (position-aux x (cdr ls) (+ i 1)))))
 
 ; tail-recursion
 (define (my-reverse ls)
@@ -80,6 +80,13 @@
         p
         (let ((m (- n1 1)))
              (loop m (* p m)))))) ; iteration
+
+; original version (above version is better)
+(define (fact-let- n)
+  (let loop((n1 n) (p n))
+    (if (= n1 1)
+        p
+        (loop (- n1 1) (* p (- n1 1)))))) ; m=(- n1 1)
 
 ;
 (define (rem x ls)
@@ -118,24 +125,45 @@
         n
         (loop (cdr ls0) (* (car ls0) n)))))
 
-;
+; 
 (define (range n)
   (let loop((i 0) (ls ()))
     (if (= i n)
         (reverse ls)
         (loop (+ i 1) (cons i ls)))))
 
+; ave takes arbitrary parameters
 (define (ave . ls)
   (let loop((sum 0) (ls1 ls))
     (if (null? ls1)
         (/ sum (length ls))
         (loop (+ sum (car ls1)) (cdr ls1)))))
 
-; letrec
+; letrec (we can call itself in it (*))
 (define (fact-letrec n)
-  (letrec ((iter (lambda (n1 p)
+  (letrec 
+    ((iter (lambda (n1 p)
                    (if (= n1 1)
                        p
                        (let ((m (- n1 1)))
                          (iter m (* p m)))))))     ; *
     (iter n n)))
+
+;
+(define (my-reverse-letrec ls)
+  (letrec ((itr (lambda (l0 l1)
+                        (if (null? l0)
+                            l1
+                            (itr (cdr l0) (cons (car l0) l1))))))
+          (itr ls ())))
+
+;
+(define (my-sum-letrec ls)
+  (letrec ((itr (lambda (l0 n)
+                        (if (null? l0)
+                            n
+                            (itr (cdr l0) (+ (car l0) n))))))
+  (itr ls 0)))
+
+;
+
