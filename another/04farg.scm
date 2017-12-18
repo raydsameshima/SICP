@@ -1,3 +1,4 @@
+; 04 function
 ; hello with name
 (define hello
   (lambda (name)
