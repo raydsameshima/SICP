@@ -1,4 +1,4 @@
-; recursion
+; 07 recursion
 ; factorial
 (define (fact n)
   (if (<= n 1)
@@ -14,10 +14,10 @@
       (fact2helper (- a 1) (* b a))))
 
 ; (define (fact3 n)
-;   (let ((h a b) (if (<= a 1)
-;                     b
-;                     (h (- a 1) (* b a)))))
-;        (h n 1))
+;   (let (((h a b) (if (<= a 1)
+;                      b
+;                      (h (- a 1) (* b a)))))
+;        (h n 1)))
 
 (define (my-length ls)
   (if (null? ls)
@@ -29,14 +29,24 @@
       0
       (+ (car ls) (my-sum (cdr ls)))))
 
+; from solution
 (define (remove x ls)
   (if (null? ls)
       '()
       (let ((h (car ls)))
-            ((if (eqv? x h)
-                 (lambda (y) y)
-                 (lambda (y) (cons h y)))
-             (remove x (cdr ls))))))
+           ((if (eqv? x h)
+                (lambda (y) y) ; if x=h then id hits (remove x (cdr ls))
+                (lambda (y) (cons h y)))
+            (remove x (cdr ls))))))
+
+(define (remove2 x ls)
+  (if (null? ls)
+      '()
+      (let ((h (car ls)) 
+            (hs (cdr ls)))
+           (if (eqv? x h)
+               (remove2 x hs)
+               (cons h (remove2 x hs))))))
 
 ; tail-recursion
 (define (position x ls)
