@@ -75,7 +75,7 @@
 
 ; named let
 (define (fact-let n)
-  (let loop((n1 n) (p n))         ; initialization (both n1 and p become n)
+  (let loop ((n1 n) (p n))         ; initialization (both n1 and p become n)
     (if (= n1 1)                    
         p
         (let ((m (- n1 1)))
@@ -83,14 +83,14 @@
 
 ; original version (above version is better)
 (define (fact-let- n)
-  (let loop((n1 n) (p n))
+  (let loop ((n1 n) (p n))
     (if (= n1 1)
         p
         (loop (- n1 1) (* p (- n1 1)))))) ; m=(- n1 1)
 
 ;
 (define (rem x ls)
-  (let loop((ls0 ls) (ls1 ()))
+  (let loop ((ls0 ls) (ls1 ()))
     (if (null? ls0)                         ; no-match
         (my-reverse ls1)                    ; naturally reverse order
         (loop (cdr ls0)                     ; iteration
@@ -100,7 +100,7 @@
 
 ;
 (define (position x ls)
-  (let loop((ls0 ls) (i 0))
+  (let loop ((ls0 ls) (i 0))
     (cond
       ((null? ls0) #f)
       ((eqv? x (car ls0)) i)
@@ -108,33 +108,34 @@
 
 ;
 (define (my-rev-let ls)
-  (let loop((ls0 ls) (ls1 ()))
+  (let loop ((ls0 ls) (ls1 ()))
     (if (null? ls0)
         ls1
         (loop (cdr ls0) (cons (car ls0) ls1)))))
 
 ;
 (define (my-sum-let ls)
-  (let loop((ls0 ls) (n 0))
+  (let loop ((ls0 ls) (n 0))
     (if (null? ls0)
         n
         (loop (cdr ls0) (+ (car ls0) n)))))
+;
 (define (my-product ls)
-  (let loop((ls0 ls) (n 1))
+  (let loop ((ls0 ls) (n 1))
     (if (null? ls0)
         n
         (loop (cdr ls0) (* (car ls0) n)))))
 
 ; 
 (define (range n)
-  (let loop((i 0) (ls ()))
+  (let loop ((i 0) (ls ()))
     (if (= i n)
         (reverse ls)
         (loop (+ i 1) (cons i ls)))))
 
 ; ave takes arbitrary parameters
 (define (ave . ls)
-  (let loop((sum 0) (ls1 ls))
+  (let loop ((sum 0) (ls1 ls))
     (if (null? ls1)
         (/ sum (length ls))
         (loop (+ sum (car ls1)) (cdr ls1)))))
@@ -164,6 +165,3 @@
                             n
                             (itr (cdr l0) (+ (car l0) n))))))
   (itr ls 0)))
-
-;
-
