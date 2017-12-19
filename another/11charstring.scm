@@ -3,7 +3,7 @@
 ;
 (define (title-style str)
   (let loop ((ls (string->list str))
-             (w #t)
+             (w #t) ; initial value (true for the first letter)
              (acc '()))
     (if (null? ls)
         (list->string (reverse acc))
