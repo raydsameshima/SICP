@@ -1,8 +1,14 @@
 ; 04 function
+; http://www.shido.info/lisp/scheme4.html
+;
 ; hello with name
 (define hello
   (lambda (name)
     (string-append "Hello " name "!")))
+
+; without lambda
+(define (hello- name)
+        (string-append "Hello " name "!!"))
 
 ; sum of three numbers
 (define sum3
@@ -13,27 +19,6 @@
 (define three-args+
   (lambda (a b c . d)
     (list a b c d)))
-
-; 11 error> (load "farg.scm")
-; 
-; ;Loading "farg.scm"... done
-; ;Value: three-args+
-; 
-; 11 error> (three-args+ 2 3 4)
-; 
-; ;Value 20: (2 3 4 ())
-; 
-; 11 error> (three-args+ 2 3 4 5)
-; 
-; ;Value 21: (2 3 4 (5))
-; 
-; 11 error> (three-args+ 2 3 4 5 6)
-; 
-; ;Value 22: (2 3 4 (5 6))
-; 
-; 11 error> (three-args+ 2 3 4 5 6 7 8)
-; 
-; ;Value 23: (2 3 4 (5 6 7 8))
 
 ; instead of lambda
 (define (hello name)
