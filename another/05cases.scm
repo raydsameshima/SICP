@@ -1,4 +1,5 @@
 ; 05 cases
+; http://www.shido.info/lisp/scheme5.html
 ; if
 (define (sum-gp a0 r n)
   (* a0
@@ -123,5 +124,13 @@
 ; ;Value: #f
 ; 
 ; 1 ]=> (eqv? ls1 ls2)
+; 
+; ;Value: #f
+;
+; 1 ]=> (< 1 2 3)
+; 
+; ;Value: #t
+; 
+; 1 ]=> (< 1 2 3 4 5 5)
 ; 
 ; ;Value: #f
