@@ -1,24 +1,20 @@
 ; 07 recursion
+; http://www.shido.info/lisp/scheme7.html
+;
 ; factorial
 (define (fact n)
   (if (<= n 1)
       1
-      (* n (fact (- n 1)))))
+      (* n (fact (- n 1))))) ; naive recursion (space wasting)
 
 ; using tail-recursion and accumulator
 (define (fact2 n)
-  (helper n 1))
+  (fact2helper n 1))
 (define (fact2helper a b)
   (if (<= a 1)
       b
       (fact2helper (- a 1) (* b a))))
-
-; (define (fact3 n)
-;   (let (((h a b) (if (<= a 1)
-;                      b
-;                      (h (- a 1) (* b a)))))
-;        (h n 1)))
-
+;
 (define (my-length ls)
   (if (null? ls)
       0
@@ -73,9 +69,12 @@
       a
       (sum-tail (cdr ls) (+ a (car ls)))))
 
-; named let
+; So far we have used auxiliary function.
+; We can fully access these aux function, but we want to seal them.
+;
+; named let (Scheme's loop)
 (define (fact-let n)
-  (let loop ((n1 n) (p n))         ; initialization (both n1 and p become n)
+  (let loop ((n1 n) (p n))        ; initialization (both n1 and p become n)
     (if (= n1 1)                    
         p
         (let ((m (- n1 1)))
@@ -140,28 +139,32 @@
         (/ sum (length ls))
         (loop (+ sum (car ls1)) (cdr ls1)))))
 
-; letrec (we can call itself in it (*))
+; letrec
+; We can call itself in it (*)
 (define (fact-letrec n)
   (letrec 
     ((iter (lambda (n1 p)
-                   (if (= n1 1)
-                       p
-                       (let ((m (- n1 1)))
-                         (iter m (* p m)))))))     ; *
+             (if (= n1 1)
+                 p
+                 (let ((m (- n1 1)))
+                   (iter m (* p m))))))) ; (*)
     (iter n n)))
 
 ;
 (define (my-reverse-letrec ls)
-  (letrec ((itr (lambda (l0 l1)
-                        (if (null? l0)
-                            l1
-                            (itr (cdr l0) (cons (car l0) l1))))))
+  (letrec 
+    ((itr (lambda (l0 l1)
+            (if (null? l0)
+                l1
+                (itr (cdr l0) (cons (car l0) l1))))))
           (itr ls ())))
 
 ;
 (define (my-sum-letrec ls)
-  (letrec ((itr (lambda (l0 n)
-                        (if (null? l0)
-                            n
-                            (itr (cdr l0) (+ (car l0) n))))))
+  (letrec 
+    ((itr (lambda (l0 n)
+            (if (null? l0)
+                n
+                (itr (cdr l0) (+ (car l0) n))))))
   (itr ls 0)))
+
