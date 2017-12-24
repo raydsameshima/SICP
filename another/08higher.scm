@@ -1,4 +1,5 @@
 ; 08 higher order functions
+; http://www.shido.info/lisp/scheme8.html
 ; 
 ; 1 ]=> (sort '(7883 9099 6729 2828 7754 4179 5340 2644 2958 2239) <)
 ; 
@@ -28,8 +29,9 @@
   (filter even? ls))
 
 (define (filter-10-100 ls)
-  (filter (lambda (x) (and (<= 10 x) (<= x 100))) ls))
-; (filter (lambda (x) (<= 10 x 100)) ls))
+; (filter (lambda (x) (and (<= 10 x) (<= x 100))) ls))
+  (filter (lambda (x) (<= 10 x 100)) ls))
+; <= can take arbitrary number of arguments.
 
 ; fold
 (define (sum ls)
