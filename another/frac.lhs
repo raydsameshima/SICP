@@ -41,7 +41,6 @@ The (r,1-r) division.
 > aLeaf proc p q
 >   = scanl proc p $ repeat q
 
-
 (define (fractal proc n points fout)
   (let loop ((i 0) (points points))
     (if (= n i)
@@ -58,7 +57,8 @@ The (r,1-r) division.
    
 > fractal 
 >   :: (Pt -> Pt -> [Pt]) -> Int -> [Pt] -> [Pt]
-> fractal proc n ps = loop n ps
+> -- fractal proc n ps = loop n ps
+> fractal proc = loop 
 >   where
 >     loop :: Int -> [Pt] -> [Pt]
 >     loop m qs 
@@ -92,7 +92,7 @@ The (r,1-r) division.
   (let ((n 0))
     (lambda (p1 p2)
       (let ((op (if (even? n) + -))
-            (p3 (devide  p1 p2 0.5)))
+            (p3 (devide p1 p2 0.5)))
         (set! n (inc n))
         (list
           p1
@@ -101,20 +101,30 @@ The (r,1-r) division.
 
 > dragonCurve
 >   :: Pt -> Pt -> [Pt]
-> dragonCurve p1 p2
->   = undefined
-
+> dragonCurve p1 p2 = loop 0
+>   where
+>     op n = if (even n) then (+) else (-)
+>     Pt x3 y3 = divide p1 p2 0.5
+>     loop = undefined
 
 ;;; koch curve
 (define (koch p1 p2)
   (let ((p3 (devide p1 p2 2/3))
- (p4 (devide p1 p2 1/3))
- (p5 (devide p1 p2 0.5))
- (c  (/ (sqrt 3) 2)))
+        (p4 (devide p1 p2 1/3))
+        (p5 (devide p1 p2 0.5))
+        (c  (/ (sqrt 3) 2)))
     (list
-     p1
-     p3
-     (point (- (_x p5) (* c (- (_y p4) (_y p3))))
-     (+ (_y p5) (* c (- (_x p4) (_x p3)))))
-     p4)))
-    
+      p1
+      p3
+      (point (- (_x p5) (* c (- (_y p4) (_y p3))))
+             (+ (_y p5) (* c (- (_x p4) (_x p3)))))
+      p4)))
+
+> koch :: Pt -> Pt -> [Pt]    
+> koch p1 p2 = [p1, p3, p6, p4]
+>   where
+>     c = (sqrt 3)/2
+>     p3@(Pt x3 y3) = divide p1 p2 (2/3)
+>     p4@(Pt x4 y4) = divide p1 p2 (1/3)
+>     Pt x5 y5      = divide p1 p2 0.5
+>     p6            = Pt (x5 - c*(y4 - y3)) (y5 + c*(x4 - x3))
