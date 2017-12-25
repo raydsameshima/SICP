@@ -87,26 +87,6 @@ The (r,1-r) division.
 
   *Main> printCurve (fractal cCurve 14 [(Pt 0 0),(Pt 2 3)]) "c14.txt"
 
-; dragon curve
-(define dragon-curve 
-  (let ((n 0))
-    (lambda (p1 p2)
-      (let ((op (if (even? n) + -))
-            (p3 (devide p1 p2 0.5)))
-        (set! n (inc n))
-        (list
-          p1
-          (point (op (_x p3) (- (_y p3) (_y p2)))
-                 (op (_y p3) (- (_x p2) (_x p3)))))))))
-
-> dragonCurve
->   :: Pt -> Pt -> [Pt]
-> dragonCurve p1 p2 = loop 0
->   where
->     op n = if (even n) then (+) else (-)
->     Pt x3 y3 = divide p1 p2 0.5
->     loop = undefined
-
 ;;; koch curve
 (define (koch p1 p2)
   (let ((p3 (devide p1 p2 2/3))
@@ -128,3 +108,48 @@ The (r,1-r) division.
 >     p4@(Pt x4 y4) = divide p1 p2 (1/3)
 >     Pt x5 y5      = divide p1 p2 0.5
 >     p6            = Pt (x5 - c*(y4 - y3)) (y5 + c*(x4 - x3))
+
+> dragonCurve
+>   :: Pt -> Pt -> [Pt]
+> dragonCurve p1 p2@(Pt x2 y2) = [p1, p4]
+>   where
+>     Pt x3 y3 = divide p1 p2 0.5
+>     p4 = Pt (x3 - (y3 - y2)) (y3 - (x2 - x3))
+
+
+Need a small modification since dragonCurve must be sensitive
+to the "global" state n (the number of iteration).
+
+; dragon curve
+(define dragon-curve 
+  (let ((n 0))
+    (lambda (p1 p2)
+      (let ((op (if (even? n) + -))
+            (p3 (devide p1 p2 0.5)))
+        (set! n (inc n))
+        (list
+          p1
+          (point (op (_x p3) (- (_y p3) (_y p2)))
+                 (op (_y p3) (- (_x p2) (_x p3)))))))))
+
+> dragonCurve'
+>   :: Int -> Pt -> Pt -> [Pt]
+> dragonCurve' n p1 p2@(Pt x2 y2) = [p1, p4]
+>   where
+>     op = if (even n) then (+) else (-)
+>     Pt x3 y3 = divide p1 p2 0.5
+>     p4 = Pt (x3 `op` (y3 - y2)) (y3 `op` (x2 - x3))
+> fractal' 
+>   :: (Int -> Pt -> Pt -> [Pt]) -> Int -> [Pt] -> [Pt]
+> -- fractal proc n ps = loop n ps
+> fractal' proc' = loop 
+>   where
+>     loop :: Int -> [Pt] -> [Pt]
+>     loop m qs 
+>       | m == 0    = qs
+>       | otherwise = iter m qs []
+>       where
+>         iter :: Int -> [Pt] -> [Pt] -> [Pt]
+>         iter m [a]           bs = loop (m-1) (reverse (a:bs))
+>         iter m (a:as@(a':_)) bs = iter m as (rappend (proc' m a a') bs)
+
