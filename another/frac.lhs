@@ -1,5 +1,5 @@
 fractal 
-http://www.shido.info/lisp/scheme8.html
+  http://www.shido.info/lisp/scheme8.html
 
 > data Pt 
 >   = Pt { px :: Double
@@ -11,7 +11,7 @@ rappend [1..3] [4..6] -> [3,2,1,4,5,6]
 
 > rappend
 >   :: [a] -> [a] -> [a]
-> rappend as bs = foldl (flip (:)) bs as
+> rappend as bs = foldl (flip (:)) bs as -- hlint
 > {-
 > rappend []     bs = bs 
 > rappend (a:as) bs = rappend as (a:bs)
@@ -36,10 +36,13 @@ The (r,1-r) division.
 >   where
 >     s = unlines $ map pts2string ps
 
+> {-
 > aLeaf
 >   :: (Pt -> Pt -> Pt) -> Pt -> Pt -> [Pt] 
-> aLeaf proc p q
->   = scanl proc p $ repeat q
+> aLeaf proc p q = scanl proc p $ repeat q
+> -}   
+
+The main function for generic fractal.
 
 (define (fractal proc n points fout)
   (let loop ((i 0) (points points))
@@ -117,7 +120,7 @@ The (r,1-r) division.
 >     p4 = Pt (x3 - (y3 - y2)) (y3 - (x2 - x3))
 
 
-Need a small modification since dragonCurve must be sensitive
+We may eed a small modification since dragonCurve must be sensitive
 to the "global" state n (the number of iteration).
 
 ; dragon curve
